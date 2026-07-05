@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function Footer({ dict, lang }: { dict: any; lang: string }) {
   return (
     <footer className="border-t border-white/10 bg-black pt-20 pb-10 relative overflow-hidden">
-      <div className="absolute bottom-0 right-0 w-[50rem] h-[50rem] bg-[#00f0ff]/5 rounded-full blur-[150px] -z-10 translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-[50rem] h-[50rem] rounded-full -z-10 translate-y-1/2 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%)' }} />
 
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -19,6 +19,8 @@ export default function Footer({ dict, lang }: { dict: any; lang: string }) {
                 width={180}
                 height={60}
                 className="object-contain w-auto h-auto opacity-90 hover:opacity-100 transition-all hover:scale-105 duration-300"
+                priority
+                loading="eager"
               />
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
@@ -93,6 +95,8 @@ export default function Footer({ dict, lang }: { dict: any; lang: string }) {
               width={80}
               height={32}
               className="object-contain w-auto h-6 opacity-60 hover:opacity-100 transition-opacity"
+              priority
+              loading="eager"
             />
           </div>
         </div>

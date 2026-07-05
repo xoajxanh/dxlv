@@ -36,11 +36,8 @@ export default function Navbar({ dict, lang }: { dict: any; lang: string }) {
   }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 animate-slide-down ${
         isScrolled ? "glassmorphism py-4" : "bg-transparent py-6"
       }`}
     >
@@ -53,6 +50,7 @@ export default function Navbar({ dict, lang }: { dict: any; lang: string }) {
             height={60} 
             className="object-contain w-auto h-auto opacity-90 group-hover:opacity-100 transition-all hover:scale-105 duration-300"
             priority
+            loading="eager"
           />
         </Link>
 
@@ -124,6 +122,6 @@ export default function Navbar({ dict, lang }: { dict: any; lang: string }) {
           </Link>
         </motion.div>
       )}
-    </motion.nav>
+    </nav>
   );
 }

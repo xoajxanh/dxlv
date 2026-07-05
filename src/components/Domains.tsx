@@ -43,6 +43,8 @@ export default function Domains({ dict }: { dict: any }) {
           sizes="100vw"
           quality={60}
           className="object-cover"
+          priority
+          loading="eager"
         />
       </div>
       
@@ -84,7 +86,7 @@ export default function Domains({ dict }: { dict: any }) {
               whileHover={{ y: -10 }}
               className={`relative overflow-hidden rounded-3xl bg-black/40 backdrop-blur-xl p-8 border border-white/10 group shadow-lg`}
             >
-              <div className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl ${domain.gradient} opacity-50 rounded-full blur-[50px] -z-10 group-hover:opacity-100 transition-opacity duration-500`} />
+              <div className={`absolute top-0 right-0 w-64 h-64 opacity-50 rounded-full pointer-events-none group-hover:opacity-100 transition-opacity duration-500`} style={{ background: `radial-gradient(circle, var(--tw-gradient-from) 0%, transparent 70%)` }} />
               
               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
                 {domain.icon}

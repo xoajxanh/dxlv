@@ -113,7 +113,7 @@ export default function AboutUs({ dict }: { dict: any }) {
       </div>
       
       {/* Background elements */}
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-[#7000ff]/10 rounded-full blur-[100px] -z-10 translate-y-1/2" />
+      <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full -z-10 translate-y-1/2 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(112,0,255,0.1) 0%, transparent 70%)' }} />
     </section>
   );
 }

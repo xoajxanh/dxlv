@@ -18,13 +18,14 @@ export default function Hero({ dict }: { dict: any }) {
           quality={60}
           className="object-cover opacity-30 mix-blend-screen"
           priority
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505] z-10" />
       </div>
       
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f0ff]/20 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-[#7000ff]/20 rounded-full blur-[120px] -z-10" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-[#0055ff]/10 rounded-full blur-[150px] -z-10" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full -z-10 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,240,255,0.15) 0%, transparent 70%)' }} />
+      <div className="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] rounded-full -z-10 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(112,0,255,0.15) 0%, transparent 70%)' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] rounded-full -z-10 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,85,255,0.1) 0%, transparent 70%)' }} />
 
       <div className="container mx-auto px-6 md:px-12 z-20 text-center">
         <div
