@@ -27,39 +27,27 @@ export default function Hero({ dict }: { dict: any }) {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-[#0055ff]/10 rounded-full blur-[150px] -z-10" />
 
       <div className="container mx-auto px-6 md:px-12 z-20 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8"
+        <div
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 animate-zoom-in"
         >
           <Code2 className="w-4 h-4 text-[#00f0ff]" />
           <span className="text-sm font-medium text-gray-300">Leading Technology Solutions</span>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight"
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight animate-fade-in-up delay-200"
         >
           {dict.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#0055ff] to-[#7000ff]">{dict.subtitle}</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-10 font-light"
+        <p
+          className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-10 font-light animate-fade-in-up delay-400"
         >
           {dict.description}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6"
+        <div
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in-up delay-600"
         >
           <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 cursor-pointer group">
             {dict.viewMore}

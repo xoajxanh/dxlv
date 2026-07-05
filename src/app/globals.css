@@ -46,3 +46,48 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* CSS Animations for fast mobile load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@utility animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@utility animate-zoom-in {
+  animation: zoomIn 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@utility delay-200 {
+  animation-delay: 0.2s;
+}
+
+@utility delay-400 {
+  animation-delay: 0.4s;
+}
+
+@utility delay-600 {
+  animation-delay: 0.6s;
+}
