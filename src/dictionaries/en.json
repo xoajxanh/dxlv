@@ -1,0 +1,97 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "tech": "Technology",
+    "services": "Services",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "title": "Executing Technological",
+    "subtitle": "Visions",
+    "description": "DXLV specializes in providing comprehensive software solutions and outsourcing fixed-cost projects with a diverse Tech Stack: .NET, Node.js, Blockchain & AI Agent.",
+    "cta": "Contact for Consultation",
+    "viewMore": "Explore Services"
+  },
+  "about": {
+    "title1": "About",
+    "title2": "DXLV",
+    "desc1": "DXLV is a pioneering technology company specializing in providing high-quality software solutions, websites, and mobile applications. We are proud to be a strategic partner for outsource and fixed-cost projects.",
+    "desc2": "With the motto \"Quality is honor\", DXLV continuously applies the most advanced technologies such as Blockchain and Artificial Intelligence (AI Agents) to bring outstanding competitive advantages to customers.",
+    "stats": {
+      "projects": "Completed Projects",
+      "clients": "Satisfied Clients"
+    },
+    "features": [
+      {
+        "title": "Precise Objectives",
+        "description": "Ensuring schedule and requirements, especially for Fixed Cost projects."
+      },
+      {
+        "title": "Expert Team",
+        "description": "Gathering top engineers experienced in diverse Tech Stacks."
+      },
+      {
+        "title": "Breakthrough Tech",
+        "description": "Pioneering the application of Blockchain, AI Agent into practical solutions."
+      },
+      {
+        "title": "Comprehensive Services",
+        "description": "Providing everything from e-commerce, HRM, ERP to complex CRM systems."
+      }
+    ]
+  },
+  "techStack": {
+    "title1": "Diverse",
+    "title2": "Tech Stack",
+    "description": "Ready to meet all technical requirements with a modern technology arsenal, from Backend, Frontend, Database to Web3 and AI."
+  },
+  "domains": {
+    "title1": "Key",
+    "title2": "Domains",
+    "description": "We provide specialized solutions, custom-designed to solve the specific problems of each domain.",
+    "viewAll": "View all services",
+    "items": [
+      {
+        "title": "E-Commerce",
+        "description": "Powerful e-commerce platforms, optimizing conversion rates and user experience."
+      },
+      {
+        "title": "HRM Systems",
+        "description": "Digital human resource management software, KPI evaluation and recruitment process automation."
+      },
+      {
+        "title": "ERP Solutions",
+        "description": "Comprehensive enterprise resource planning system, efficiently connecting departments."
+      },
+      {
+        "title": "CRM Platforms",
+        "description": "Smart customer relationship management tools, integrating AI to predict sales trends."
+      }
+    ]
+  },
+  "footer": {
+    "company": "Company",
+    "about": "About Us",
+    "careers": "Careers",
+    "news": "News",
+    "docs": "Documentation",
+    "privacy": "Privacy Policy",
+    "services": "Services",
+    "contact": "Contact",
+    "address": "139 Yen Lac Street, Vinh Tuy Ward, Hanoi",
+    "rights": "DXLV CO., LTD. All rights reserved."
+  },
+  "login": {
+    "subtitle": "Enter internal password to access documents",
+    "placeholder": "Enter password...",
+    "authenticating": "Authenticating...",
+    "submit": "Access",
+    "backHome": "Back to home"
+  },
+  "document": {
+    "subtitle": "Internal document management",
+    "logout": "Log out",
+    "empty": "Empty folder"
+  }
+}

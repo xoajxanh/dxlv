@@ -1,0 +1,97 @@
+{
+  "navigation": {
+    "home": "Trang chủ",
+    "about": "Về chúng tôi",
+    "tech": "Công nghệ",
+    "services": "Dịch vụ",
+    "contact": "Liên hệ ngay"
+  },
+  "hero": {
+    "title": "Thực thi Tầm Nhìn",
+    "subtitle": "Công Nghệ",
+    "description": "DXLV chuyên cung cấp các giải pháp phần mềm toàn diện, outsource dự án fixed-cost với đa dạng Tech Stack: .NET, Node.js, Blockchain & AI Agent.",
+    "cta": "Liên hệ tư vấn",
+    "viewMore": "Khám phá dịch vụ"
+  },
+  "about": {
+    "title1": "Về",
+    "title2": "DXLV",
+    "desc1": "DXLV là công ty công nghệ tiên phong, chuyên cung cấp các giải pháp phần mềm, website và ứng dụng di động chất lượng cao. Chúng tôi tự hào là đối tác chiến lược cho các dự án outsource và fixed-cost.",
+    "desc2": "Với phương châm \"Chất lượng là danh dự\", DXLV không ngừng ứng dụng các công nghệ tiên tiến nhất như Blockchain, Trí tuệ nhân tạo (AI Agents) để mang lại lợi thế cạnh tranh vượt trội cho khách hàng.",
+    "stats": {
+      "projects": "Dự án hoàn thành",
+      "clients": "Khách hàng hài lòng"
+    },
+    "features": [
+      {
+        "title": "Mục Tiêu Chính Xác",
+        "description": "Đảm bảo đúng tiến độ và yêu cầu, đặc biệt với các dự án Fixed Cost."
+      },
+      {
+        "title": "Đội Ngũ Chuyên Gia",
+        "description": "Tập hợp các kỹ sư hàng đầu có kinh nghiệm với đa dạng Tech Stack."
+      },
+      {
+        "title": "Công Nghệ Đột Phá",
+        "description": "Tiên phong ứng dụng Blockchain, AI Agent vào các giải pháp thực tế."
+      },
+      {
+        "title": "Dịch Vụ Toàn Diện",
+        "description": "Cung cấp từ e-commerce, HRM, ERP đến các hệ thống CRM phức tạp."
+      }
+    ]
+  },
+  "techStack": {
+    "title1": "Đa Dạng",
+    "title2": "Tech Stack",
+    "description": "Sẵn sàng đáp ứng mọi yêu cầu kỹ thuật với kho tàng công nghệ hiện đại, từ Backend, Frontend, Database cho đến Web3 và AI."
+  },
+  "domains": {
+    "title1": "Lĩnh Vực",
+    "title2": "Trọng Tâm",
+    "description": "Chúng tôi cung cấp các giải pháp chuyên sâu, được thiết kế riêng biệt để giải quyết các bài toán đặc thù của từng lĩnh vực.",
+    "viewAll": "Xem tất cả dịch vụ",
+    "items": [
+      {
+        "title": "E-Commerce",
+        "description": "Nền tảng thương mại điện tử mạnh mẽ, tối ưu hóa tỷ lệ chuyển đổi và trải nghiệm người dùng."
+      },
+      {
+        "title": "HRM Systems",
+        "description": "Phần mềm quản lý nhân sự số hóa, đánh giá KPI và tự động hóa quy trình tuyển dụng."
+      },
+      {
+        "title": "ERP Solutions",
+        "description": "Hệ thống quản trị nguồn lực doanh nghiệp toàn diện, kết nối các phòng ban hiệu quả."
+      },
+      {
+        "title": "CRM Platforms",
+        "description": "Công cụ quản lý quan hệ khách hàng thông minh, tích hợp AI để dự đoán xu hướng bán hàng."
+      }
+    ]
+  },
+  "footer": {
+    "company": "Công ty",
+    "about": "Về chúng tôi",
+    "careers": "Tuyển dụng",
+    "news": "Tin tức",
+    "docs": "Tài liệu",
+    "privacy": "Chính sách bảo mật",
+    "services": "Dịch vụ",
+    "contact": "Liên hệ",
+    "address": "Số 139 phố Yên Lạc, phường Vĩnh Tuy, Thành phố Hà Nội",
+    "rights": "CÔNG TY TNHH DỊCH VỤ VÀ TƯ VẤN DXLV. All rights reserved."
+  },
+  "login": {
+    "subtitle": "Nhập mật khẩu nội bộ để truy cập tài liệu",
+    "placeholder": "Nhập mật khẩu...",
+    "authenticating": "Đang xác thực...",
+    "submit": "Truy cập",
+    "backHome": "Về trang chủ"
+  },
+  "document": {
+    "subtitle": "Quản lý tài liệu nội bộ",
+    "logout": "Đăng xuất",
+    "empty": "Thư mục trống"
+  }
+}

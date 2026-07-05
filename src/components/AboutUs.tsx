@@ -4,30 +4,30 @@ import { motion } from "framer-motion";
 import { Target, Users, Zap, Briefcase } from "lucide-react";
 import Image from "next/image";
 
-const features = [
-  {
-    icon: <Target className="w-6 h-6 text-[#00f0ff]" />,
-    title: "Mục Tiêu Chính Xác",
-    description: "Đảm bảo đúng tiến độ và yêu cầu, đặc biệt với các dự án Fixed Cost.",
-  },
-  {
-    icon: <Users className="w-6 h-6 text-[#7000ff]" />,
-    title: "Đội Ngũ Chuyên Gia",
-    description: "Tập hợp các kỹ sư hàng đầu có kinh nghiệm với đa dạng Tech Stack.",
-  },
-  {
-    icon: <Zap className="w-6 h-6 text-[#0055ff]" />,
-    title: "Công Nghệ Đột Phá",
-    description: "Tiên phong ứng dụng Blockchain, AI Agent vào các giải pháp thực tế.",
-  },
-  {
-    icon: <Briefcase className="w-6 h-6 text-[#00f0ff]" />,
-    title: "Dịch Vụ Toàn Diện",
-    description: "Cung cấp từ e-commerce, HRM, ERP đến các hệ thống CRM phức tạp.",
-  },
-];
+export default function AboutUs({ dict }: { dict: any }) {
+  const features = [
+    {
+      icon: <Target className="w-6 h-6 text-[#00f0ff]" />,
+      title: dict.features[0].title,
+      description: dict.features[0].description,
+    },
+    {
+      icon: <Users className="w-6 h-6 text-[#7000ff]" />,
+      title: dict.features[1].title,
+      description: dict.features[1].description,
+    },
+    {
+      icon: <Zap className="w-6 h-6 text-[#0055ff]" />,
+      title: dict.features[2].title,
+      description: dict.features[2].description,
+    },
+    {
+      icon: <Briefcase className="w-6 h-6 text-[#00f0ff]" />,
+      title: dict.features[3].title,
+      description: dict.features[3].description,
+    },
+  ];
 
-export default function AboutUs() {
   return (
     <section id="about" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -42,26 +42,26 @@ export default function AboutUs() {
             className="flex-1"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Về <span className="text-glow-cyan">DXLV</span>
+              {dict.title1} <span className="text-glow-cyan">{dict.title2}</span>
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-[#00f0ff] to-[#7000ff] mb-8" />
             
             <p className="text-gray-400 text-lg mb-6 leading-relaxed">
-              DXLV là công ty công nghệ tiên phong, chuyên cung cấp các giải pháp phần mềm, website và ứng dụng di động chất lượng cao. Chúng tôi tự hào là đối tác chiến lược cho các dự án <span className="text-white font-medium">outsource</span> và <span className="text-white font-medium">fixed-cost</span>.
+              {dict.desc1}
             </p>
             
             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-              Với phương châm &quot;Chất lượng là danh dự&quot;, DXLV không ngừng ứng dụng các công nghệ tiên tiến nhất như Blockchain, Trí tuệ nhân tạo (AI Agents) để mang lại lợi thế cạnh tranh vượt trội cho khách hàng.
+              {dict.desc2}
             </p>
             
             <div className="flex gap-4">
               <div className="bg-white/5 border border-white/10 p-4 rounded-xl flex-1 text-center backdrop-blur-sm">
                 <h3 className="text-3xl font-black text-[#00f0ff] mb-2">100+</h3>
-                <p className="text-sm text-gray-400">Dự án hoàn thành</p>
+                <p className="text-sm text-gray-400">{dict.stats.projects}</p>
               </div>
               <div className="bg-white/5 border border-white/10 p-4 rounded-xl flex-1 text-center backdrop-blur-sm">
                 <h3 className="text-3xl font-black text-[#7000ff] mb-2">50+</h3>
-                <p className="text-sm text-gray-400">Khách hàng hài lòng</p>
+                <p className="text-sm text-gray-400">{dict.stats.clients}</p>
               </div>
             </div>
           </motion.div>

@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Code2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Hero() {
+export default function Hero({ dict }: { dict: any }) {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-grid-pattern">
       {/* Background glowing orbs & Image Layer */}
@@ -40,8 +41,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight"
         >
-          Thực thi <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#0055ff] to-[#7000ff]">Tầm Nhìn</span><br />
-          Công Nghệ
+          {dict.title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] via-[#0055ff] to-[#7000ff]">{dict.subtitle}</span>
         </motion.h1>
 
         <motion.p
@@ -50,7 +50,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-10 font-light"
         >
-          DXLV chuyên cung cấp các giải pháp phần mềm toàn diện, outsource dự án fixed-cost với đa dạng Tech Stack: .NET, Node.js, Blockchain & AI Agent.
+          {dict.description}
         </motion.p>
 
         <motion.div
@@ -60,13 +60,13 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
           <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 cursor-pointer group">
-            Khám phá dịch vụ
+            {dict.viewMore}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           
-          <button className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-lg hover:bg-white/10 transition-all hover:border-[#00f0ff]/50 cursor-pointer">
-            Liên hệ tư vấn
-          </button>
+          <Link href="https://zalo.me/0984852389" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-lg hover:bg-white/10 transition-all hover:border-[#00f0ff]/50 cursor-pointer text-center block">
+            {dict.cta}
+          </Link>
         </motion.div>
       </div>
 

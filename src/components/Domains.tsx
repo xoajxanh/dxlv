@@ -4,34 +4,34 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Users, Factory, LineChart } from "lucide-react";
 import Image from "next/image";
 
-const domains = [
-  {
-    title: "E-Commerce",
-    description: "Nền tảng thương mại điện tử mạnh mẽ, tối ưu hóa tỷ lệ chuyển đổi và trải nghiệm người dùng.",
-    icon: <ShoppingCart className="w-8 h-8 text-[#00f0ff]" />,
-    gradient: "from-[#00f0ff]/20 to-transparent",
-  },
-  {
-    title: "HRM Systems",
-    description: "Phần mềm quản lý nhân sự số hóa, đánh giá KPI và tự động hóa quy trình tuyển dụng.",
-    icon: <Users className="w-8 h-8 text-[#7000ff]" />,
-    gradient: "from-[#7000ff]/20 to-transparent",
-  },
-  {
-    title: "ERP Solutions",
-    description: "Hệ thống quản trị nguồn lực doanh nghiệp toàn diện, kết nối các phòng ban hiệu quả.",
-    icon: <Factory className="w-8 h-8 text-[#0055ff]" />,
-    gradient: "from-[#0055ff]/20 to-transparent",
-  },
-  {
-    title: "CRM Platforms",
-    description: "Công cụ quản lý quan hệ khách hàng thông minh, tích hợp AI để dự đoán xu hướng bán hàng.",
-    icon: <LineChart className="w-8 h-8 text-[#00f0ff]" />,
-    gradient: "from-[#00f0ff]/20 to-transparent",
-  },
-];
+export default function Domains({ dict }: { dict: any }) {
+  const domains = [
+    {
+      title: dict.items[0].title,
+      description: dict.items[0].description,
+      icon: <ShoppingCart className="w-8 h-8 text-[#00f0ff]" />,
+      gradient: "from-[#00f0ff]/20 to-transparent",
+    },
+    {
+      title: dict.items[1].title,
+      description: dict.items[1].description,
+      icon: <Users className="w-8 h-8 text-[#7000ff]" />,
+      gradient: "from-[#7000ff]/20 to-transparent",
+    },
+    {
+      title: dict.items[2].title,
+      description: dict.items[2].description,
+      icon: <Factory className="w-8 h-8 text-[#0055ff]" />,
+      gradient: "from-[#0055ff]/20 to-transparent",
+    },
+    {
+      title: dict.items[3].title,
+      description: dict.items[3].description,
+      icon: <LineChart className="w-8 h-8 text-[#00f0ff]" />,
+      gradient: "from-[#00f0ff]/20 to-transparent",
+    },
+  ];
 
-export default function Domains() {
   return (
     <section id="services" className="py-24 relative overflow-hidden">
       {/* Background Texture Layer */}
@@ -54,10 +54,10 @@ export default function Domains() {
             className="max-w-2xl"
           >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Lĩnh Vực <span className="text-glow-cyan">Trọng Tâm</span>
+              {dict.title1} <span className="text-glow-cyan">{dict.title2}</span>
             </h2>
             <p className="text-gray-400 text-lg">
-              Chúng tôi cung cấp các giải pháp chuyên sâu, được thiết kế riêng biệt để giải quyết các bài toán đặc thù của từng lĩnh vực.
+              {dict.description}
             </p>
           </motion.div>
           <motion.button
@@ -67,7 +67,7 @@ export default function Domains() {
             transition={{ duration: 0.8 }}
             className="px-6 py-3 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 transition-colors font-medium cursor-pointer shrink-0 backdrop-blur-md"
           >
-            Xem tất cả dịch vụ
+            {dict.viewAll}
           </motion.button>
         </div>
 

@@ -16,7 +16,7 @@ const technologies = [
   { name: "AI Agent", category: "AI", icon: <BrainCircuit className="w-5 h-5 text-[#7000ff]" />, color: "border-[#7000ff]/30" },
 ];
 
-export default function TechStack() {
+export default function TechStack({ dict }: { dict: any }) {
   return (
     <section id="tech" className="py-24 relative bg-black/50 border-y border-white/5">
       <div className="container mx-auto px-6 md:px-12">
@@ -28,10 +28,10 @@ export default function TechStack() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Đa Dạng <span className="text-glow-purple">Tech Stack</span>
+            {dict.title1} <span className="text-glow-purple">{dict.title2}</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Sẵn sàng đáp ứng mọi yêu cầu kỹ thuật với kho tàng công nghệ hiện đại, từ Backend, Frontend, Database cho đến Web3 và AI.
+            {dict.description}
           </p>
         </motion.div>
 
