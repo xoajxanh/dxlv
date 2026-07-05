@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "CÔNG TY TNHH DỊCH VỤ VÀ TƯ VẤN DXLV",
   description: "DXLV CO., LTD - Giải pháp công nghệ toàn diện cho doanh nghiệp. Chuyên cung cấp các dự án phần mềm chất lượng cao, outsource và fixed-cost.",
   icons: {
-    icon: "/logo-black-square.png?v=2",
+    icon: "/dxlv.ico",
   },
 };
 
