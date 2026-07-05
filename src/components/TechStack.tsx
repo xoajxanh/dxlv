@@ -35,7 +35,7 @@ export default function TechStack({ dict }: { dict: any }) {
           </p>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 max-w-6xl mx-auto">
           {technologies.map((tech, index) => (
             <motion.div
               key={tech.name}
@@ -44,14 +44,14 @@ export default function TechStack({ dict }: { dict: any }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
               whileHover={{ y: -5, scale: 1.05 }}
-              className={`flex items-center gap-3 px-6 py-4 rounded-2xl glassmorphism border ${tech.color} hover:bg-white/10 transition-all cursor-default group`}
+              className={`flex items-center gap-2 md:gap-3 px-3 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl glassmorphism border ${tech.color} hover:bg-white/10 transition-all cursor-default group`}
             >
-              <div className="bg-white/5 p-2 rounded-lg group-hover:scale-110 transition-transform">
+              <div className="bg-white/5 p-1.5 md:p-2 rounded-lg group-hover:scale-110 transition-transform">
                 {tech.icon}
               </div>
-              <div>
-                <h4 className="font-bold text-white text-lg">{tech.name}</h4>
-                <p className="text-xs text-gray-400">{tech.category}</p>
+              <div className="overflow-hidden">
+                <h4 className="font-bold text-white text-sm md:text-lg truncate">{tech.name}</h4>
+                <p className="text-[10px] md:text-xs text-gray-400 truncate">{tech.category}</p>
               </div>
             </motion.div>
           ))}

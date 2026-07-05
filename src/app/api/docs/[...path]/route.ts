@@ -49,17 +49,17 @@ export async function GET(
   }
 
   // 3. Kiểm tra file tồn tại
-  if (!fs.existsSync(fullPath)) {
+  try {
+    const stat = await fs.promises.stat(fullPath);
+    if (!stat.isFile()) {
+      return new NextResponse("403 Forbidden - Không thể đọc thư mục trực tiếp", { status: 403 });
+    }
+  } catch (error) {
     return new NextResponse("404 Not Found - File không tồn tại", { status: 404 });
   }
 
-  const stat = fs.statSync(fullPath);
-  if (!stat.isFile()) {
-    return new NextResponse("403 Forbidden - Không thể đọc thư mục trực tiếp", { status: 403 });
-  }
-
   // 4. Đọc file và xác định Content-Type
-  const fileBuffer = fs.readFileSync(fullPath);
+  const fileBuffer = await fs.promises.readFile(fullPath);
   const ext = path.extname(fullPath).toLowerCase();
   const contentType = mimeTypes[ext] || "application/octet-stream";
 

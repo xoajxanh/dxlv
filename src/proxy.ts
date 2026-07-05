@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 const locales = ["en", "vi"];
 const defaultLocale = "vi";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // IISNode passes named pipe through URL (e.g. //pipe/uuid/...), strip it out.
   let pathname = request.nextUrl.pathname;
   if (pathname.match(/^\/?\/?pipe\/[^\/]+/)) {
