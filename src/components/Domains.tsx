@@ -40,6 +40,8 @@ export default function Domains({ dict }: { dict: any }) {
           src="/texture.png"
           alt="Tech Pattern"
           fill
+          sizes="100vw"
+          quality={60}
           className="object-cover"
         />
       </div>

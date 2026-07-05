@@ -14,6 +14,8 @@ export default function Hero({ dict }: { dict: any }) {
           src="/hero-bg.png"
           alt="Abstract tech background"
           fill
+          sizes="100vw"
+          quality={60}
           className="object-cover opacity-30 mix-blend-screen"
           priority
         />
