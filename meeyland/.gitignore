@@ -1,0 +1,34 @@
+# Node.js / Next.js
+node_modules/
+.pnp
+.pnp.js
+.next/
+out/
+build/
+coverage/
+.env*.local
+.env
+.vercel
+
+# .NET / C#
+bin/
+obj/
+TestResults/
+*.user
+*.userosscache
+*.suo
+*.log
+*.sqlite
+*.mdf
+*.ldf
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
