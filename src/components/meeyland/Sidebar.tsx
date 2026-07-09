@@ -175,12 +175,10 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
               </div>
             </div>
 
-            <DrawerClose asChild>
-              <button
-                className="p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer outline-none border-none bg-transparent flex-shrink-0 -mr-2 -mt-1"
-              >
-                <X size={18} />
-              </button>
+            <DrawerClose
+              className="p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer outline-none border-none bg-transparent flex-shrink-0 -mr-2 -mt-1"
+            >
+              <X size={18} />
             </DrawerClose>
           </div>
 
