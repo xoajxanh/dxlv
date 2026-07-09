@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Livekit.Server.Sdk.Dotnet;
-using meeyland_be.Models;
 
 namespace meeyland_be.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TokenController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -15,24 +17,37 @@ public class TokenController : ControllerBase
         _configuration = configuration;
     }
 
+    // GET /api/token/livekit?roomName=xyz
+    // Uses the authenticated user's ID + display name so the frontend doesn't need to pass them
     [HttpGet("livekit")]
-    public IActionResult GetToken([FromQuery] string roomName, [FromQuery] string participantName)
+    public IActionResult GetToken([FromQuery] string roomName)
     {
-        var apiKey = _configuration["LiveKit:ApiKey"] ?? "devkey";
+        if (string.IsNullOrWhiteSpace(roomName))
+            return BadRequest(new { message = "roomName is required." });
+
+        var apiKey    = _configuration["LiveKit:ApiKey"]    ?? "devkey";
         var apiSecret = _configuration["LiveKit:ApiSecret"] ?? "secret";
 
-        // Generate a token
+        var userId      = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var displayName = User.FindFirstValue("displayName") ?? User.FindFirstValue(ClaimTypes.Name) ?? userId;
+
         var token = new AccessToken(apiKey, apiSecret)
-            .WithIdentity(participantName)
-            .WithName(participantName)
-            .WithGrants(new VideoGrants 
-            { 
-                RoomJoin = true, 
-                Room = roomName,
-                CanPublish = true,
+            .WithIdentity(userId)          // stable user ID as identity
+            .WithName(displayName)         // display name shown in room
+            .WithGrants(new VideoGrants
+            {
+                RoomJoin    = true,
+                Room        = roomName,
+                CanPublish  = true,
                 CanSubscribe = true
             });
 
-        return Ok(new { token = token.ToJwt() });
+        return Ok(new
+        {
+            token       = token.ToJwt(),
+            roomName,
+            identity    = userId,
+            displayName
+        });
     }
 }
