@@ -157,7 +157,10 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
   );
 
   return (
-    <aside className="tg-sidebar flex flex-col h-full w-[320px] flex-shrink-0 border-r border-[#304050] select-none relative overflow-hidden">
+    <aside className={cn(
+      "tg-sidebar flex flex-col h-full flex-shrink-0 border-r border-[#304050] select-none relative overflow-hidden",
+      activeRoomId ? "hidden md:flex md:w-[320px]" : "w-full md:w-[320px]"
+    )}>
 
       {/* Slide-over Left Menu Drawer */}
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} swipeDirection="left">

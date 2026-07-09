@@ -3,7 +3,7 @@
 import { useState } from "react";
 import {
   Phone, Video, PhoneOff, PhoneIncoming,
-  UserPlus, Search, MoreVertical, Bookmark
+  UserPlus, Search, MoreVertical, Bookmark, ArrowLeft
 } from "lucide-react";
 import { Room } from "@/lib/meeyland/api";
 import { Avatar } from "@/components/meeyland/Avatar";
@@ -63,10 +63,11 @@ interface ChatHeaderProps {
   onVideoCall: () => void;
   onInviteToCall: (userId: number) => void;
   activeCallRoomName?: string;
+  onBack?: () => void;
 }
 
 export function ChatHeader({
-  room, currentUserId, onVoiceCall, onVideoCall, onInviteToCall, activeCallRoomName
+  room, currentUserId, onVoiceCall, onVideoCall, onInviteToCall, activeCallRoomName, onBack
 }: ChatHeaderProps) {
   const [showInvite, setShowInvite] = useState(false);
 
@@ -75,10 +76,15 @@ export function ChatHeader({
   const displayName = isSavedMessages ? "Saved Messages" : (room.isGroup ? room.name : otherMembers[0]?.displayName ?? room.name);
 
   return (
-    <header className="tg-header flex items-center justify-between h-[72px] bg-[#202B36] border-b border-[#304050] px-6 flex-shrink-0 select-none">
-      <div className="flex items-center gap-3">
+    <header className="tg-header flex items-center justify-between h-[72px] bg-[#202B36] border-b border-[#304050] px-4 md:px-6 flex-shrink-0 select-none">
+      <div className="flex items-center gap-2 md:gap-3">
+        {onBack && (
+          <button onClick={onBack} className="md:hidden p-1.5 -ml-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer outline-none">
+            <ArrowLeft size={20} />
+          </button>
+        )}
         {isSavedMessages ? (
-          <div className="w-12 h-12 rounded-full flex items-center justify-center bg-[#3390EC] text-white flex-shrink-0">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-[#3390EC] text-white flex-shrink-0">
             <Bookmark size={20} className="fill-white" />
           </div>
         ) : (

@@ -14,6 +14,7 @@ import { Room, Member, Message, getMessages, getRooms, getLiveKitToken, markRoom
 import { toast } from "sonner";
 import { X, Pin, MessageSquare } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { cn } from "@/lib/utils";
 
 export default function ChatPage() {
   const { user, isLoading } = useAuth();
@@ -58,11 +59,31 @@ export default function ChatPage() {
       item.roomId === room.roomId ? { ...item, unreadCount: 0 } : item
     ));
     if (user) markRoomRead(user.token, room.roomId).catch(console.error);
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set("roomId", room.roomId.toString());
+      window.history.replaceState({}, '', url.toString());
+    }
   }, [user]);
 
   useEffect(() => {
     if (!user) return;
-    getRooms(user.token).then(setRooms).catch(console.error);
+    getRooms(user.token).then(data => {
+      setRooms(data);
+      if (typeof window !== 'undefined' && !activeRoomRef.current) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomIdStr = urlParams.get("roomId");
+        if (roomIdStr) {
+          const roomToSelect = data.find(r => r.roomId.toString() === roomIdStr);
+          if (roomToSelect) {
+            setActiveRoom({ ...roomToSelect, unreadCount: 0 });
+            setLoadingMsgs(true);
+            markRoomRead(user.token, roomToSelect.roomId).catch(console.error);
+          }
+        }
+      }
+    }).catch(console.error);
   }, [user]);
 
   useEffect(() => {
@@ -364,14 +385,25 @@ export default function ChatPage() {
         onSelectRoom={handleSelectRoom}
         onRoomsChange={loadRooms} />
 
-      <div className="flex-1 flex flex-col h-full overflow-hidden" style={{ background: "var(--tg-bg)" }}>
+      <div className={cn(
+        "flex-1 flex-col h-full overflow-hidden",
+        !activeRoom ? "hidden md:flex" : "flex"
+      )} style={{ background: "var(--tg-bg)" }}>
         {activeRoom ? (
           <>
             <ChatHeader room={activeRoom} currentUserId={user.userId}
               onVoiceCall={() => handleStartCall(false)}
               onVideoCall={() => handleStartCall(true)}
               onInviteToCall={handleInviteToCall}
-              activeCallRoomName={activeCallRoomName ?? undefined} />
+              activeCallRoomName={activeCallRoomName ?? undefined}
+              onBack={() => {
+                setActiveRoom(null);
+                if (typeof window !== 'undefined') {
+                  const url = new URL(window.location.href);
+                  url.searchParams.delete("roomId");
+                  window.history.replaceState({}, '', url.toString());
+                }
+              }} />
 
             {/* Sticky Pinned Message Header */}
             {pinnedMessage && (
