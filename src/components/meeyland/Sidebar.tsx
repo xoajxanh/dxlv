@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Menu, Users, LogOut, X, Check, Loader2, MessageSquare, Bookmark, User, Settings, BookOpen, Plus } from "lucide-react";
+import { Search, Menu, Users, LogOut, X, Check, Loader2, MessageSquare, Bookmark, User, Settings, BookOpen, Plus, Home } from "lucide-react";
 import { useAuth, AuthUser } from "@/lib/meeyland/AuthContext";
 import { Avatar } from "@/components/meeyland/Avatar";
 import { cn } from "@/lib/utils";
@@ -13,9 +13,11 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle
 } from "@/components/ui/meeyland/Dialog";
-import { Drawer, DrawerContent } from "@/components/ui/meeyland/drawer";
+import { Drawer, DrawerContent, DrawerClose } from "@/components/ui/meeyland/drawer";
 import { Input } from "@/components/ui/meeyland/Input";
 import { Button } from "@/components/ui/meeyland/Button";
+import Link from "next/link";
+import Image from "next/image";
 
 interface SidebarProps {
   activeRoomId?: number;
@@ -161,22 +163,25 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} swipeDirection="left">
         <DrawerContent className="fixed inset-y-0 left-0 z-50 flex h-full w-[320px] flex-col border-r border-[#304050] bg-[#202B36] outline-none shadow-2xl rounded-none select-none">
           {/* Header with user info */}
-          <div className="p-5 border-b border-[#304050] bg-[#17212B] flex flex-col gap-4 relative">
-            <button
-              onClick={() => setIsDrawerOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer outline-none border-none bg-transparent"
-            >
-              <X size={18} />
-            </button>
-            <Avatar name={user?.displayName ?? "User"} size="lg" />
-            <div className="mt-2">
-              <h3 className="font-semibold text-base text-white">{user?.displayName}</h3>
-              <p className="text-xs text-slate-400">@{user?.username}</p>
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#2ECC71]" />
-                <span className="text-[11px] text-[#2ECC71] font-medium">Online</span>
+          <div className="p-5 border-b border-[#304050] bg-[#17212B] flex justify-between items-start">
+            <div className="flex items-center gap-3">
+              <Avatar name={user?.displayName ?? "User"} size="lg" />
+              <div className="flex flex-col justify-center min-w-0">
+                <div className="flex items-start gap-1.5">
+                  <h3 className="font-semibold text-base text-white truncate leading-tight">{user?.displayName}</h3>
+                  <span className="w-2 h-2 rounded-full bg-[#2ECC71] mt-0.5 flex-shrink-0" />
+                </div>
+                <p className="text-xs text-slate-400 truncate mt-0.5">@{user?.username}</p>
               </div>
             </div>
+
+            <DrawerClose asChild>
+              <button
+                className="p-1.5 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer outline-none border-none bg-transparent flex-shrink-0 -mr-2 -mt-1"
+              >
+                <X size={18} />
+              </button>
+            </DrawerClose>
           </div>
 
           {/* Drawer Menu Items */}
@@ -188,14 +193,6 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
               <User size={18} className="text-slate-400" />
               <span className="text-sm font-medium">Profile</span>
             </button>
-
-            {/* <button 
-              onClick={handleOpenSavedMessages}
-              className="w-full flex items-center gap-4 px-6 py-3 text-slate-300 hover:text-white hover:bg-[#2A3947] transition-colors text-left cursor-pointer outline-none border-none bg-transparent"
-            >
-              <Bookmark size={18} className="text-slate-400" />
-              <span className="text-sm font-medium">Saved Messages</span>
-            </button> */}
 
             <button
               onClick={() => { setShowContacts(true); setIsDrawerOpen(false); }}
@@ -213,13 +210,13 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
               <span className="text-sm font-medium">Groups</span>
             </button>
 
-            {/* <button
-              onClick={() => { setShowSettings(true); setIsDrawerOpen(false); }}
+            <Link
+              href="/"
               className="w-full flex items-center gap-4 px-6 py-3 text-slate-300 hover:text-white hover:bg-[#2A3947] transition-colors text-left cursor-pointer outline-none border-none bg-transparent"
             >
-              <Settings size={18} className="text-slate-400" />
-              <span className="text-sm font-medium">Settings</span>
-            </button> */}
+              <Home size={18} className="text-slate-400" />
+              <span className="text-sm font-medium">Về trang chủ</span>
+            </Link>
           </div>
 
           {/* Drawer Footer */}
