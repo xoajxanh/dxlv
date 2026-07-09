@@ -62,8 +62,11 @@ export function useSignalR(token: string | null, handlers: Handlers) {
     if (!token) return;
 
     let cancelled = false;
+    const hubUrl = `${API_BASE}/chathub`;
+    console.log("🚀 [DEBUG] SignalR connecting to:", hubUrl);
+    
     const conn = new signalR.HubConnectionBuilder()
-      .withUrl(`${API_BASE}/chathub`, {
+      .withUrl(hubUrl, {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()

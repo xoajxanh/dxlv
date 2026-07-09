@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { API_BASE } from "@/lib/utils";
 
 export interface AuthUser {
@@ -22,13 +22,18 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    if (typeof window === "undefined") return null;
-    const stored = window.localStorage.getItem("meeyland_user");
-    if (!stored) return null;
-    try { return JSON.parse(stored) as AuthUser; } catch { return null; }
-  });
-  const [isLoading] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem("meeyland_user");
+      if (stored) {
+        setUser(JSON.parse(stored) as AuthUser);
+      }
+    } catch { }
+    setIsLoading(false);
+  }, []);
 
   const login = useCallback(async (username: string, password: string) => {
     const res = await fetch(`${API_BASE}/api/auth/login`, {

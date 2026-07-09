@@ -139,7 +139,8 @@ export function Sidebar({ activeRoomId, onSelectRoom, rooms, onRoomsChange }: Si
 
   const handleLogout = () => {
     logout();
-    router.replace("/login");
+    const lang = window.location.pathname.split("/")[1] || "en";
+    router.replace(`/${lang}/demo/meeyland/login`);
   };
 
   const getRoomDisplayName = (room: Room) => {
