@@ -60,6 +60,7 @@ export default function Footer({ dict, lang }: { dict: any; lang: string }) {
               <li><a href="#" className="text-gray-400 hover:text-[#00f0ff] transition-colors">{dict.careers}</a></li>
               <li><a href="#" className="text-gray-400 hover:text-[#00f0ff] transition-colors">{dict.news}</a></li>
               <li><Link href={`/${lang}/document`} className="text-gray-400 hover:text-[#00f0ff] transition-colors">{dict.docs}</Link></li>
+              <li><Link href={`/${lang}/demo`} className="text-gray-400 hover:text-[#00f0ff] transition-colors">{dict.demo}</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-[#00f0ff] transition-colors">{dict.privacy}</a></li>
             </ul>
           </div>

@@ -5,7 +5,7 @@
 # ============================================================
 
 BE_DIR  := meeyland-be
-FE_DIR  := meeyland-fe
+FE_DIR  := ..
 
 BE_LOG  := /tmp/meeyland-be.log
 FE_LOG  := /tmp/meeyland-fe.log

@@ -76,6 +76,7 @@
     "careers": "Tuyển dụng",
     "news": "Tin tức",
     "docs": "Tài liệu",
+    "demo": "Dự án Demo",
     "privacy": "Chính sách bảo mật",
     "services": "Dịch vụ",
     "contact": "Liên hệ",
@@ -93,5 +94,12 @@
     "subtitle": "Quản lý tài liệu nội bộ",
     "logout": "Đăng xuất",
     "empty": "Thư mục trống"
+  },
+  "demo": {
+    "subtitle": "Quản lý dự án demo nội bộ",
+    "title": "Các dự án Demo",
+    "description": "Chọn một dự án demo từ danh sách bên dưới để bắt đầu trải nghiệm và khám phá.",
+    "logout": "Đăng xuất",
+    "loginSubtitle": "Nhập mật khẩu nội bộ để truy cập các dự án demo"
   }
 }

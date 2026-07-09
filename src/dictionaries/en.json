@@ -76,6 +76,7 @@
     "careers": "Careers",
     "news": "News",
     "docs": "Documentation",
+    "demo": "Demo Projects",
     "privacy": "Privacy Policy",
     "services": "Services",
     "contact": "Contact",
@@ -93,5 +94,12 @@
     "subtitle": "Internal document management",
     "logout": "Log out",
     "empty": "Empty folder"
+  },
+  "demo": {
+    "subtitle": "Internal demo project management",
+    "title": "Demo Projects",
+    "description": "Select a demo project from the list below to run and explore its capabilities.",
+    "logout": "Log out",
+    "loginSubtitle": "Enter internal password to access demo projects"
   }
 }
