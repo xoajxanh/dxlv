@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const API_BASE = "http://161.248.146.65:5229";
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5229";
