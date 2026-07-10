@@ -127,7 +127,10 @@ export default function ChatPage() {
 
     if (isActiveRoom) {
       setMessages(prev => [...prev, {
-        id: msg.id, content: msg.content, createdAt: msg.createdAt,
+        id: msg.id,
+        content: msg.content,
+        attachmentUrl: msg.attachmentUrl,
+        createdAt: msg.createdAt,
         isReadByOther: false,
         sender: { userId: msg.sender.userId, username: "", displayName: msg.sender.displayName, avatarUrl: msg.sender.avatarUrl }
       }]);
@@ -342,7 +345,7 @@ export default function ChatPage() {
     respondToCallRef.current = respondToCall;
   }, [respondToCall]);
 
-  const handleSend = useCallback(async (text: string) => {
+  const handleSend = useCallback(async (text: string, attachmentUrl?: string) => {
     if (!activeRoom || !user) return;
     let finalContent = text;
     if (replyingToMessage) {
@@ -352,7 +355,7 @@ export default function ChatPage() {
       finalContent = `[Reply to #${replyingToMessage.id}|${replyingToMessage.sender.displayName}|${snippet}] ${text}`;
       setReplyingToMessage(null);
     }
-    await sendMessage(activeRoom.roomId, finalContent);
+    await sendMessage(activeRoom.roomId, finalContent, attachmentUrl);
   }, [activeRoom, user, sendMessage, replyingToMessage]);
 
   const handleStartCall = useCallback(async (isVideo: boolean) => {
@@ -435,7 +438,8 @@ export default function ChatPage() {
               onTyping={isTyping => sendTyping(activeRoom.roomId, isTyping)}
               disabled={loadingMsgs}
               replyingToMessage={replyingToMessage}
-              onCancelReply={() => setReplyingToMessage(null)} />
+              onCancelReply={() => setReplyingToMessage(null)}
+              token={user.token} />
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center bg-[#17212B] select-none p-6 text-center">

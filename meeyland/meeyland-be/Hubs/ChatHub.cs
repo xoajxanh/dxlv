@@ -50,7 +50,7 @@ public class ChatHub : Hub
     // ──────────────────────────────────────────────────────────
     //  Send a text message to a chat room
     // ──────────────────────────────────────────────────────────
-    public async Task SendMessage(int chatRoomId, string content)
+    public async Task SendMessage(int chatRoomId, string content, string? attachmentUrl = null)
     {
         var room = await _db.ChatRooms.FindAsync(chatRoomId);
         if (room == null) return;
@@ -66,6 +66,7 @@ public class ChatHub : Hub
             ChatRoomId = chatRoomId,
             SenderId = CurrentUserId,
             Content = content,
+            AttachmentUrl = attachmentUrl,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -86,6 +87,7 @@ public class ChatHub : Hub
             id = message.Id,
             chatRoomId = message.ChatRoomId,
             content = message.Content,
+            attachmentUrl = message.AttachmentUrl,
             createdAt = message.CreatedAt,
             isGroup = room.IsGroup,
             chatRoomName = room.Name,

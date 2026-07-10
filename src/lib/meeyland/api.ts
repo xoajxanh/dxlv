@@ -121,3 +121,80 @@ export async function getMessages(token: string, roomId: number, limit = 50, bef
 export async function getLiveKitToken(token: string, roomName: string): Promise<{ token: string; identity: string; displayName: string }> {
   return handleResponse(await fetch(`${API_BASE}/api/token/livekit?roomName=${encodeURIComponent(roomName)}`, { headers: authHeaders(token) }));
 }
+
+// ── File Uploads ──────────────────────────────────────────────
+
+export interface UploadSession {
+  uploadId: string;
+  chunkSize: number;
+  totalChunks: number;
+}
+
+export async function initiateUpload(
+  token: string,
+  fileName: string,
+  fileSize: number,
+  contentType: string
+): Promise<UploadSession> {
+  return handleResponse(
+    await fetch(`${API_BASE}/api/upload/initiate`, {
+      method: "POST",
+      headers: authHeaders(token),
+      body: JSON.stringify({ fileName, fileSize, contentType }),
+    })
+  );
+}
+
+export async function getUploadStatus(
+  token: string,
+  uploadId: string
+): Promise<{ uploadedChunks: number[] }> {
+  return handleResponse(
+    await fetch(`${API_BASE}/api/upload/status?uploadId=${encodeURIComponent(uploadId)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  );
+}
+
+export async function uploadChunk(
+  token: string,
+  uploadId: string,
+  chunkIndex: number,
+  chunkBlob: Blob,
+  abortSignal?: AbortSignal
+): Promise<{ message: string }> {
+  const formData = new FormData();
+  formData.append("uploadId", uploadId);
+  formData.append("chunkIndex", String(chunkIndex));
+  formData.append("chunk", chunkBlob, `chunk_${chunkIndex}`);
+
+  const res = await fetch(`${API_BASE}/api/upload/chunk`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+    signal: abortSignal,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message ?? `Chunk upload HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function completeUpload(
+  token: string,
+  uploadId: string,
+  fileName: string,
+  totalChunks: number
+): Promise<{ attachmentUrl: string }> {
+  return handleResponse(
+    await fetch(`${API_BASE}/api/upload/complete`, {
+      method: "POST",
+      headers: authHeaders(token),
+      body: JSON.stringify({ uploadId, fileName, totalChunks }),
+    })
+  );
+}

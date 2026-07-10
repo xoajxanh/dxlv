@@ -9,6 +9,7 @@ export interface IncomingMessage {
   id: number;
   chatRoomId: number;
   content: string;
+  attachmentUrl?: string;
   createdAt: string;
   isGroup?: boolean;
   chatRoomName?: string;
@@ -111,8 +112,8 @@ export function useSignalR(token: string | null, handlers: Handlers) {
     await conn.invoke(methodName, ...args);
   }, []);
 
-  const sendMessage = useCallback(async (chatRoomId: number, content: string) => {
-    await invoke("SendMessage", chatRoomId, content);
+  const sendMessage = useCallback(async (chatRoomId: number, content: string, attachmentUrl?: string) => {
+    await invoke("SendMessage", chatRoomId, content, attachmentUrl);
   }, [invoke]);
 
   const sendTyping = useCallback(async (chatRoomId: number, isTyping: boolean) => {

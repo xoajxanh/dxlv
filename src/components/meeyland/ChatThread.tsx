@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn, API_BASE } from "@/lib/utils";
 import { Avatar } from "@/components/meeyland/Avatar";
 import { Message } from "@/lib/meeyland/api";
 import { Bubble, BubbleContent } from "@/components/ui/meeyland/bubble";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Download, FileText } from "lucide-react";
 
 interface ChatThreadProps {
   roomId: number;
@@ -29,6 +29,78 @@ export function ChatThread({
   const latestOwnMessageId = [...messages]
     .reverse()
     .find(item => item.sender.userId === currentUserId)?.id;
+
+  const renderAttachment = (url: string) => {
+    const fullUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
+    const fileName = url.substring(url.lastIndexOf("/") + 1);
+    // Remove GUID prefix from filename if present (e.g. guid_filename.ext)
+    const cleanFileName = fileName.replace(/^[a-f0-9-]{36}_/i, "");
+    const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
+
+    const imageExts = ["png", "jpg", "jpeg", "gif", "webp"];
+    const videoExts = ["mp4", "webm", "ogg", "mov"];
+    const audioExts = ["mp3", "wav", "ogg", "m4a"];
+
+    if (imageExts.includes(ext)) {
+      return (
+        <a href={fullUrl} target="_blank" rel="noopener noreferrer" className="block hover:opacity-90 transition-opacity">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={fullUrl}
+            alt={cleanFileName}
+            className="max-h-60 max-w-full rounded-lg object-contain bg-black/10"
+          />
+        </a>
+      );
+    }
+
+    if (videoExts.includes(ext)) {
+      return (
+        <video
+          src={fullUrl}
+          controls
+          className="max-h-60 max-w-full rounded-lg bg-black"
+          preload="metadata"
+        />
+      );
+    }
+
+    if (audioExts.includes(ext)) {
+      return (
+        <audio
+          src={fullUrl}
+          controls
+          className="w-full max-w-xs mt-1"
+          preload="metadata"
+        />
+      );
+    }
+
+    // Default document card representation
+    return (
+      <div className="flex items-center gap-3 bg-[#17212B]/85 border border-[#304050]/40 p-3 rounded-xl max-w-xs text-left">
+        <div className="w-10 h-10 rounded-lg bg-[#3390EC]/10 text-[#3390EC] flex items-center justify-center flex-shrink-0">
+          <FileText size={20} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-xs text-white truncate" title={cleanFileName}>
+            {cleanFileName}
+          </p>
+          <p className="text-[10px] text-slate-400 mt-0.5">Document File</p>
+        </div>
+        <a
+          href={fullUrl}
+          download={cleanFileName}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-8 h-8 rounded-full bg-[#3390EC]/20 text-[#3390EC] hover:bg-[#3390EC]/30 flex items-center justify-center flex-shrink-0 transition-colors"
+          title="Download File"
+        >
+          <Download size={14} />
+        </a>
+      </div>
+    );
+  };
 
   // Scroll to bottom: instantly on room switch, smoothly on new messages
   useEffect(() => {
@@ -158,7 +230,16 @@ export function ChatThread({
                       </div>
                     )}
 
-                    <p id={`msg-${msg.id}`} className="whitespace-pre-wrap pr-1">{displayContent}</p>
+                    {/* Render attachment if present */}
+                    {msg.attachmentUrl && (
+                      <div className="mb-2 max-w-full overflow-hidden rounded-lg">
+                        {renderAttachment(msg.attachmentUrl)}
+                      </div>
+                    )}
+
+                    {displayContent && (
+                      <p id={`msg-${msg.id}`} className="whitespace-pre-wrap pr-1">{displayContent}</p>
+                    )}
 
                     {/* Time + Receipts aligned nicely in bubble */}
                     <div className="flex items-center justify-end self-end text-[10px] opacity-75 mt-1 select-none pointer-events-none">

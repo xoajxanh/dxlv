@@ -259,3 +259,12 @@
   top: 0px !important;
   transform: translate(30%, -30%) !important;
 }
+
+/* ── Mobile Input Zoom Prevention (iOS focus zoom fix) ── */
+@media (max-width: 767px) {
+  .meeyland-theme input,
+  .meeyland-theme textarea,
+  .meeyland-theme select {
+    font-size: 16px !important;
+  }
+}

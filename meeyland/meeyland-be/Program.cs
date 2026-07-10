@@ -78,6 +78,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
 app.UseCors("AllowAll");
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -86,6 +87,13 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ChatDbContext>();
     db.Database.Migrate();
+
+    // Ensure uploads folders exist
+    var webRootPath = app.Environment.WebRootPath ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot");
+    var uploadsPath = Path.Combine(webRootPath, "uploads");
+    var tempPath = Path.Combine(uploadsPath, "temp");
+    if (!Directory.Exists(uploadsPath)) Directory.CreateDirectory(uploadsPath);
+    if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
 }
 
 app.MapControllers();
