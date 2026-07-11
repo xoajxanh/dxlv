@@ -222,7 +222,7 @@ public class ChatHub : Hub
     // ──────────────────────────────────────────────────────────
     //  Accept or decline call — notify the caller
     // ──────────────────────────────────────────────────────────
-    public async Task RespondToCall(int callerId, bool accepted, string liveKitRoomName)
+    public async Task RespondToCall(int callerId, bool accepted, string liveKitRoomName, string? reason = null)
     {
         await Clients.Group(UserGroup(callerId))
             .SendAsync("CallResponse", new
@@ -230,7 +230,28 @@ public class ChatHub : Hub
                 responderId = CurrentUserId,
                 responderName = CurrentDisplayName,
                 accepted,
-                liveKitRoomName
+                liveKitRoomName,
+                reason
+            });
+    }
+
+    // ──────────────────────────────────────────────────────────
+    //  End call or cancel call — notify room members
+    // ──────────────────────────────────────────────────────────
+    public async Task EndCall(int chatRoomId, string liveKitRoomName)
+    {
+        var memberIds = await _db.RoomMembers
+            .Where(rm => rm.ChatRoomId == chatRoomId)
+            .Select(rm => rm.UserId)
+            .ToListAsync();
+        if (!memberIds.Contains(CurrentUserId)) return;
+
+        await Clients.Groups(memberIds.Where(id => id != CurrentUserId).Select(UserGroup))
+            .SendAsync("CallEnded", new
+            {
+                chatRoomId,
+                liveKitRoomName,
+                endedById = CurrentUserId
             });
     }
 

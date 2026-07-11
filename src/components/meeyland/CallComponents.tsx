@@ -3,12 +3,14 @@
 import { useState } from "react";
 import {
   Phone, Video, PhoneOff, PhoneIncoming,
-  UserPlus, Search, MoreVertical, Bookmark, ArrowLeft
+  UserPlus, Search, MoreVertical, Bookmark, ArrowLeft,
+  Maximize2, Minimize2
 } from "lucide-react";
 import { Room } from "@/lib/meeyland/api";
 import { Avatar } from "@/components/meeyland/Avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/meeyland/Dialog";
 import { Button } from "@/components/ui/meeyland/Button";
+import { cn } from "@/lib/utils";
 
 // ── LiveKit imports ──────────────────────────────────────────
 import {
@@ -172,22 +174,91 @@ function InviteModal({ members, onInvite, onClose }: {
 interface CallOverlayProps {
   token: string;
   onLeave: () => void;
+  isPip: boolean;
+  onTogglePip: () => void;
+  isGroup: boolean;
 }
 
-export function CallOverlay({ token, onLeave }: CallOverlayProps) {
+export function CallOverlay({ token, onLeave, isPip, onTogglePip, isGroup }: CallOverlayProps) {
   return (
-    <div className="fixed inset-0 z-40 flex flex-col" style={{ background: "#0a0f14" }}>
+    <div
+      className={cn(
+        "z-40 flex flex-col transition-all duration-300 shadow-2xl border bg-[#0a0f14]",
+        isPip
+          ? "fixed bottom-6 right-6 w-80 h-60 rounded-2xl overflow-hidden border-slate-700 animate-scaleIn"
+          : "fixed inset-0 border-transparent animate-fadeIn"
+      )}
+    >
+      {/* Control overlay */}
+      <div className="absolute top-2 right-2 z-50 flex items-center gap-2 bg-slate-900/80 px-2 py-1 rounded-lg backdrop-blur-sm">
+        <button
+          onClick={onTogglePip}
+          className="p-1.5 text-white hover:bg-slate-800 rounded transition-colors cursor-pointer outline-none border-none bg-transparent"
+          title={isPip ? "Maximize" : "Minimize to Picture-in-Picture"}
+        >
+          {isPip ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
+        </button>
+        {isPip && (
+          <button
+            onClick={onLeave}
+            className="p-1.5 text-red-500 hover:bg-slate-800 rounded transition-colors cursor-pointer outline-none border-none bg-transparent"
+            title={isGroup ? "Leave Call" : "End Call"}
+          >
+            <PhoneOff size={16} />
+          </button>
+        )}
+      </div>
+
       <LiveKitRoom
         token={token}
         serverUrl={LIVEKIT_URL}
         connect={true}
         onDisconnected={onLeave}
         data-lk-theme="default"
-        className="flex-1"
+        className="flex-1 min-h-0"
       >
         <VideoConference />
         <RoomAudioRenderer />
       </LiveKitRoom>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  1-1 Calling Dialing Overlay                                 */
+/* ═══════════════════════════════════════════════════════════ */
+interface DialingOverlayProps {
+  receiverName: string;
+  isVideo: boolean;
+  onCancel: () => void;
+}
+
+export function DialingOverlay({ receiverName, isVideo, onCancel }: DialingOverlayProps) {
+  return (
+    <div className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-slate-950/95 text-white animate-fadeIn">
+      <div className="flex flex-col items-center text-center space-y-6">
+        <div className="relative">
+          {/* Avatar / Pulse effect */}
+          <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center overflow-hidden animate-pulse">
+            <Avatar name={receiverName} size="lg" />
+          </div>
+          <div className="absolute inset-0 w-24 h-24 rounded-full border border-sky-500/50 animate-ping" />
+        </div>
+        
+        <div className="space-y-2">
+          <h2 className="text-xl font-bold">{receiverName}</h2>
+          <p className="text-sm text-slate-400">
+            {isVideo ? "Calling (Video)..." : "Calling..."}
+          </p>
+        </div>
+
+        <button
+          onClick={onCancel}
+          className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center hover:bg-red-700 transition-colors shadow-lg cursor-pointer outline-none mt-8 border-none"
+        >
+          <PhoneOff size={24} className="text-white" />
+        </button>
+      </div>
     </div>
   );
 }

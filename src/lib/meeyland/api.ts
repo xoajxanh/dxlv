@@ -45,6 +45,14 @@ function authHeaders(token: string) {
 }
 
 async function handleResponse<T>(res: Response): Promise<T> {
+  if (res.status === 401) {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("meeyland_user");
+      const lang = window.location.pathname.split("/")[1] || "vi";
+      window.location.href = `/${lang}/demo/meeyland/login`;
+    }
+    throw new Error("Unauthorized");
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message ?? `HTTP ${res.status}`);
@@ -177,6 +185,14 @@ export async function uploadChunk(
     signal: abortSignal,
   });
 
+  if (res.status === 401) {
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("meeyland_user");
+      const lang = window.location.pathname.split("/")[1] || "vi";
+      window.location.href = `/${lang}/demo/meeyland/login`;
+    }
+    throw new Error("Unauthorized");
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message ?? `Chunk upload HTTP ${res.status}`);

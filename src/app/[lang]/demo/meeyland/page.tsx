@@ -7,7 +7,7 @@ import { Sidebar } from "@/components/meeyland/Sidebar";
 import { ChatThread } from "@/components/meeyland/ChatThread";
 import { MessageInput } from "@/components/meeyland/MessageInput";
 import {
-  ChatHeader, CallOverlay
+  ChatHeader, CallOverlay, DialingOverlay
 } from "@/components/meeyland/CallComponents";
 import { useSignalR, IncomingMessage, IncomingCall, MessageReadEvent, TypingEvent } from "@/lib/meeyland/useSignalR";
 import { Room, Member, Message, getMessages, getRooms, getLiveKitToken, markRoomRead } from "@/lib/meeyland/api";
@@ -36,7 +36,9 @@ export default function ChatPage() {
 
   const [callToken, setCallToken] = useState<string | null>(null);
   const [activeCallRoomName, setActiveCallRoomName] = useState<string | null>(null);
-  const respondToCallRef = useRef<((callerId: number, accepted: boolean, liveKitRoomName: string) => Promise<void>) | null>(null);
+  const [dialingCall, setDialingCall] = useState<{ chatRoomId: number; roomName: string; isVideo: boolean; receiverName: string } | null>(null);
+  const [isPipMode, setIsPipMode] = useState(false);
+  const respondToCallRef = useRef<((callerId: number, accepted: boolean, liveKitRoomName: string, reason?: string) => Promise<void>) | null>(null);
 
   useEffect(() => {
     if (!isLoading && !user) router.replace(`/${lang}/demo/meeyland/login`);
@@ -46,6 +48,25 @@ export default function ChatPage() {
     if (!user) return;
     try { const data = await getRooms(user.token); setRooms(data); }
     catch (err) { console.error(err); }
+  }, [user]);
+
+  const loadActiveRoomMessages = useCallback(async () => {
+    if (!user || !activeRoomRef.current) return;
+    try {
+      const data = await getMessages(user.token, activeRoomRef.current.roomId);
+      setMessages(data);
+      const latestMessageId = data.at(-1)?.id;
+      if (latestMessageId) {
+        await markRoomRead(user.token, activeRoomRef.current.roomId, latestMessageId);
+        setRooms(prev => prev.map(room =>
+          room.roomId === activeRoomRef.current?.roomId
+            ? { ...room, unreadCount: 0, lastReadMessageId: latestMessageId }
+            : room
+        ));
+      }
+    } catch (err) {
+      console.error("Failed to load active room messages:", err);
+    }
   }, [user]);
 
   const handleSelectRoom = useCallback((room: Room) => {
@@ -234,6 +255,16 @@ export default function ChatPage() {
   }, []);
 
   const handleIncomingCall = useCallback((call: IncomingCall) => {
+    const isBusy = activeCallRoomName !== null || callToken !== null || dialingCall !== null;
+    if (isBusy) {
+      console.log("📞 [DEBUG] Busy. Automatically declining incoming call from:", call.callerName);
+      const callerId = call.callerId ?? call.inviterId;
+      if (callerId && respondToCallRef.current) {
+        respondToCallRef.current(callerId, false, call.liveKitRoomName, "busy");
+      }
+      return;
+    }
+
     let handled = false;
     const callerName = call.callerName ?? call.inviterName ?? "Someone";
     const isVideo = call.isVideo ?? true;
@@ -265,17 +296,36 @@ export default function ChatPage() {
       },
       duration: Infinity,
     });
-  }, [handleAcceptCallFor, handleDeclineCallFor]);
+  }, [handleAcceptCallFor, handleDeclineCallFor, activeCallRoomName, callToken, dialingCall]);
 
-  const handleCallResponse = useCallback((res: { responderId: number; responderName: string; accepted: boolean; liveKitRoomName: string }) => {
-    if (!res.accepted && activeCallRoomName === res.liveKitRoomName) {
+  const handleCallResponse = useCallback((res: { responderId: number; responderName: string; accepted: boolean; liveKitRoomName: string; reason?: string }) => {
+    if (dialingCall && dialingCall.roomName === res.liveKitRoomName) {
+      if (res.accepted) {
+        getLiveKitToken(user!.token, res.liveKitRoomName).then(({ token }) => {
+          setCallToken(token);
+          setActiveCallRoomName(res.liveKitRoomName);
+          setDialingCall(null);
+        }).catch(console.error);
+      } else {
+        setDialingCall(null);
+        if (res.reason === "busy") {
+          toast.error("User Busy", {
+            description: `${res.responderName} is currently in another call.`,
+          });
+        } else {
+          toast.error("Call Declined", {
+            description: `${res.responderName} declined your call.`,
+          });
+        }
+      }
+    } else if (!res.accepted && activeCallRoomName === res.liveKitRoomName) {
       setCallToken(null);
       setActiveCallRoomName(null);
       toast.error("Call Declined", {
         description: `${res.responderName} declined your call.`,
       });
     }
-  }, [activeCallRoomName]);
+  }, [dialingCall, activeCallRoomName, user]);
 
   const handleMessageRead = useCallback((evt: MessageReadEvent) => {
     setRooms(prev => prev.map(room => {
@@ -328,7 +378,26 @@ export default function ChatPage() {
     });
   }, []);
 
-  const { sendMessage, sendTyping, initiateCall, inviteToCall, respondToCall } = useSignalR(
+  const handleReconnected = useCallback(() => {
+    console.log("⚡ [DEBUG] SignalR connection restored. Syncing chat data...");
+    loadRooms();
+    loadActiveRoomMessages();
+  }, [loadRooms, loadActiveRoomMessages]);
+
+  const handleCallEnded = useCallback((evt: { chatRoomId: number; liveKitRoomName: string; endedById: number }) => {
+    toast.dismiss(`call-${evt.liveKitRoomName}`);
+    if (activeCallRoomName === evt.liveKitRoomName) {
+      setCallToken(null);
+      setActiveCallRoomName(null);
+      setIsPipMode(false);
+      toast("Call Ended", { description: "The call was ended by the other participant." });
+    } else if (dialingCall && dialingCall.roomName === evt.liveKitRoomName) {
+      setDialingCall(null);
+      toast("Call Cancelled", { description: "The other user cancelled the call." });
+    }
+  }, [activeCallRoomName, dialingCall]);
+
+  const { sendMessage, sendTyping, initiateCall, inviteToCall, respondToCall, endCall } = useSignalR(
     user?.token ?? null,
     {
       onMessage: handleMessage,
@@ -338,6 +407,8 @@ export default function ChatPage() {
       onMessageRead: handleMessageRead,
       onRoomCreated: handleRoomCreated,
       onRoomUpdated: handleRoomUpdated,
+      onReconnected: handleReconnected,
+      onCallEnded: handleCallEnded,
     }
   );
 
@@ -362,11 +433,47 @@ export default function ChatPage() {
     if (!user || !activeRoom) return;
     const roomName = `call_${activeRoom.roomId}_${uuidv4().slice(0, 8)}`;
     try {
-      const { token } = await getLiveKitToken(user.token, roomName);
-      setCallToken(token); setActiveCallRoomName(roomName);
-      await initiateCall(activeRoom.roomId, roomName, isVideo);
-    } catch (err) { console.error(err); }
+      if (activeRoom.isGroup) {
+        const { token } = await getLiveKitToken(user.token, roomName);
+        setCallToken(token);
+        setActiveCallRoomName(roomName);
+        await initiateCall(activeRoom.roomId, roomName, isVideo);
+      } else {
+        const otherMembers = activeRoom.members.filter(m => m.userId !== user.userId);
+        const receiverName = otherMembers[0]?.displayName ?? "Someone";
+        setDialingCall({ chatRoomId: activeRoom.roomId, roomName, isVideo, receiverName });
+        await initiateCall(activeRoom.roomId, roomName, isVideo);
+      }
+    } catch (err) {
+      console.error("Failed to start call:", err);
+    }
   }, [user, activeRoom, initiateCall]);
+
+  const handleCancelDialing = useCallback(async () => {
+    if (!dialingCall) return;
+    try {
+      await endCall(dialingCall.chatRoomId, dialingCall.roomName);
+    } catch (err) {
+      console.error("Failed to cancel dialing:", err);
+    } finally {
+      setDialingCall(null);
+    }
+  }, [dialingCall, endCall]);
+
+  const handleLeaveCall = useCallback(async (isGroup: boolean) => {
+    if (!activeCallRoomName || !activeRoom) return;
+    try {
+      if (!isGroup) {
+        await endCall(activeRoom.roomId, activeCallRoomName);
+      }
+    } catch (err) {
+      console.error("Failed to leave/end call:", err);
+    } finally {
+      setCallToken(null);
+      setActiveCallRoomName(null);
+      setIsPipMode(false);
+    }
+  }, [activeCallRoomName, activeRoom, endCall]);
 
   const handleInviteToCall = useCallback(async (targetUserId: number) => {
     if (!activeRoom || !activeCallRoomName) return;
@@ -454,8 +561,21 @@ export default function ChatPage() {
       </div>
 
       {callToken && (
-        <CallOverlay token={callToken}
-          onLeave={() => { setCallToken(null); setActiveCallRoomName(null); }} />
+        <CallOverlay
+          token={callToken}
+          onLeave={() => handleLeaveCall(activeRoom?.isGroup ?? false)}
+          isPip={isPipMode}
+          onTogglePip={() => setIsPipMode(prev => !prev)}
+          isGroup={activeRoom?.isGroup ?? false}
+        />
+      )}
+
+      {dialingCall && (
+        <DialingOverlay
+          receiverName={dialingCall.receiverName}
+          isVideo={dialingCall.isVideo}
+          onCancel={handleCancelDialing}
+        />
       )}
     </div>
   );

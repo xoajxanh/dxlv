@@ -44,16 +44,19 @@ interface Handlers {
   onMessage?: (msg: IncomingMessage) => void;
   onTyping?: (evt: TypingEvent) => void;
   onIncomingCall?: (call: IncomingCall) => void;
-  onCallResponse?: (res: { responderId: number; responderName: string; accepted: boolean; liveKitRoomName: string }) => void;
+  onCallResponse?: (res: { responderId: number; responderName: string; accepted: boolean; liveKitRoomName: string; reason?: string }) => void;
   onMessageRead?: (evt: MessageReadEvent) => void;
   onRoomCreated?: (room: Room) => void;
   onRoomUpdated?: (evt: { roomId: number; members: Member[] }) => void;
+  onReconnected?: () => void;
+  onCallEnded?: (evt: { chatRoomId: number; liveKitRoomName: string; endedById: number }) => void;
 }
 
 export function useSignalR(token: string | null, handlers: Handlers) {
   const connRef = useRef<signalR.HubConnection | null>(null);
   const handlersRef = useRef(handlers);
   const isConnectedRef = useRef(false);
+  const hasConnectedOnceRef = useRef(false);
 
   useEffect(() => {
     handlersRef.current = handlers;
@@ -80,21 +83,59 @@ export function useSignalR(token: string | null, handlers: Handlers) {
     conn.on("MessageRead", (evt: MessageReadEvent) => handlersRef.current.onMessageRead?.(evt));
     conn.on("RoomCreated", (room: Room) => handlersRef.current.onRoomCreated?.(room));
     conn.on("RoomUpdated", (evt: { roomId: number; members: Member[] }) => handlersRef.current.onRoomUpdated?.(evt));
+    conn.on("CallEnded", (evt: { chatRoomId: number; liveKitRoomName: string; endedById: number }) => handlersRef.current.onCallEnded?.(evt));
 
-    conn.onreconnected(() => { isConnectedRef.current = true; });
-    conn.onclose(() => { isConnectedRef.current = false; });
+    conn.onreconnected(() => {
+      console.log("⚡ [DEBUG] SignalR reconnected automatically.");
+      isConnectedRef.current = true;
+      handlersRef.current.onReconnected?.();
+    });
 
-    conn.start()
-      .then(() => {
+    conn.onclose((error) => {
+      console.warn("❌ [DEBUG] SignalR connection closed. Error:", error);
+      isConnectedRef.current = false;
+      if (!cancelled) {
+        console.log("🔄 [DEBUG] Attempting to reconnect SignalR in 5 seconds...");
+        setTimeout(startConnection, 5000);
+      }
+    });
+
+    async function startConnection() {
+      if (cancelled) return;
+      try {
+        await conn.start();
+        console.log("✅ [DEBUG] SignalR connected successfully.");
+        const isReconnect = hasConnectedOnceRef.current;
         isConnectedRef.current = true;
-        if (cancelled) {
-          isConnectedRef.current = false;
-          return conn.stop();
+        hasConnectedOnceRef.current = true;
+        if (isReconnect) {
+          handlersRef.current.onReconnected?.();
         }
-      })
-      .catch(error => {
-        if (!cancelled) console.error(error);
-      });
+      } catch (error: any) {
+        console.error("❌ [DEBUG] SignalR connection failed to start:", error);
+        const isUnauthorized = error && (
+          error.statusCode === 401 ||
+          (error.message && error.message.includes("401")) ||
+          (error.toString && error.toString().includes("401"))
+        );
+        if (isUnauthorized) {
+          console.warn("⚠️ [DEBUG] SignalR connection rejected with 401. Logging out...");
+          if (typeof window !== "undefined") {
+            window.localStorage.removeItem("meeyland_user");
+            const lang = window.location.pathname.split("/")[1] || "vi";
+            window.location.href = `/${lang}/demo/meeyland/login`;
+          }
+          return;
+        }
+        isConnectedRef.current = false;
+        if (!cancelled) {
+          console.log("🔄 [DEBUG] Retrying SignalR connection in 5 seconds...");
+          setTimeout(startConnection, 5000);
+        }
+      }
+    }
+
+    startConnection();
     connRef.current = conn;
 
     return () => {
@@ -129,8 +170,12 @@ export function useSignalR(token: string | null, handlers: Handlers) {
     await invoke("InviteToCall", chatRoomId, targetUserId, liveKitRoomName);
   }, [invoke]);
 
-  const respondToCall = useCallback(async (callerId: number, accepted: boolean, liveKitRoomName: string) => {
-    await invoke("RespondToCall", callerId, accepted, liveKitRoomName);
+  const respondToCall = useCallback(async (callerId: number, accepted: boolean, liveKitRoomName: string, reason?: string) => {
+    await invoke("RespondToCall", callerId, accepted, liveKitRoomName, reason);
+  }, [invoke]);
+
+  const endCall = useCallback(async (chatRoomId: number, liveKitRoomName: string) => {
+    await invoke("EndCall", chatRoomId, liveKitRoomName);
   }, [invoke]);
 
   const markRead = useCallback(async (chatRoomId: number, lastReadMessageId?: number) => {
@@ -138,5 +183,5 @@ export function useSignalR(token: string | null, handlers: Handlers) {
     await invoke("MarkRead", chatRoomId, lastReadMessageId);
   }, [invoke]);
 
-  return { sendMessage, sendTyping, initiateCall, inviteToCall, respondToCall, markRead };
+  return { sendMessage, sendTyping, initiateCall, inviteToCall, respondToCall, markRead, endCall };
 }
