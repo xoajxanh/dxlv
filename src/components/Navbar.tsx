@@ -74,7 +74,7 @@ export default function Navbar({ dict, lang }: { dict: any; lang: string }) {
               <Globe className="w-4 h-4" />
               {lang.toUpperCase()}
             </button>
-            <Link href="https://zalo.me/0984852389" target="_blank" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all hover:border-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center gap-2 group cursor-pointer">
+            <Link href="https://zalo.me/0968227089" target="_blank" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all hover:border-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center gap-2 group cursor-pointer">
               {dict.contact}
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
@@ -117,7 +117,7 @@ export default function Navbar({ dict, lang }: { dict: any; lang: string }) {
               {link.name}
             </Link>
           ))}
-          <Link href="https://zalo.me/0984852389" target="_blank" className="bg-gradient-to-r from-[#00f0ff] to-[#7000ff] text-white px-6 py-3 rounded-xl text-sm font-bold mt-4 cursor-pointer text-center block">
+          <Link href="https://zalo.me/0968227089" target="_blank" className="bg-gradient-to-r from-[#00f0ff] to-[#7000ff] text-white px-6 py-3 rounded-xl text-sm font-bold mt-4 cursor-pointer text-center block">
             {dict.contact}
           </Link>
         </motion.div>

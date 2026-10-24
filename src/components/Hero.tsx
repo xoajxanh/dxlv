@@ -55,7 +55,7 @@ export default function Hero({ dict }: { dict: any }) {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           
-          <Link href="https://zalo.me/0984852389" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-lg hover:bg-white/10 transition-all hover:border-[#00f0ff]/50 cursor-pointer text-center block">
+          <Link href="https://zalo.me/0968227089" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-lg hover:bg-white/10 transition-all hover:border-[#00f0ff]/50 cursor-pointer text-center block">
             {dict.cta}
           </Link>
         </div>
